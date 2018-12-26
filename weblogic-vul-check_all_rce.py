@@ -8,7 +8,6 @@ from pocsuite.api.request import req
 from pocsuite.api.poc import register
 from pocsuite.api.poc import Output, POCBase
 
-
 class TestPOC(POCBase):
     vulID = '0'
     version = '1.0'
@@ -27,7 +26,7 @@ class TestPOC(POCBase):
 
     '''
 
-    def _verify(self):        
+    def _verify(self):
         VUL=['CVE-2016-0638',
             'CVE-2016-3510',
             'CVE-2017-3248',
@@ -143,9 +142,7 @@ class TestPOC(POCBase):
         if result:
             output.success(result)
         else:
-            output.fail('Internet nothing returned')
+            output.fail('not vulnerability')
         return output
-
-
 
 register(TestPOC)

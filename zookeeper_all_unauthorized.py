@@ -5,7 +5,6 @@ import urlparse
 from pocsuite.api.poc import register
 from pocsuite.api.poc import Output, POCBase
 
-
 class TestPOC(POCBase):
     vulID = '0'
     version = '1.0'
@@ -23,8 +22,7 @@ class TestPOC(POCBase):
     Apache Zookeeper安装部署之后默认情况下不需要身份认证，攻击者可通过该漏洞泄露服务器的敏感信息。
     '''
 
-    def _verify(self):        
-        
+    def _verify(self):
         result = {}
         pr = urlparse.urlparse(self.url)
         ports = [2181]
@@ -56,9 +54,7 @@ class TestPOC(POCBase):
         if result:
             output.success(result)
         else:
-            output.fail('Internet nothing returned')
+            output.fail('not vulnerability')
         return output
-
-
 
 register(TestPOC)

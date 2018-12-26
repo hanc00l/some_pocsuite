@@ -8,7 +8,6 @@ from pocsuite.api.request import req
 from pocsuite.api.poc import register
 from pocsuite.api.poc import Output, POCBase
 
-
 class TestPOC(POCBase):
     vulID = '0'
     version = '1.0'
@@ -30,7 +29,7 @@ Oracle Fusion Middleware中的Oracle WebLogic Server组件的WLS Security子组�
 
     '''
 
-    def _verify(self):        
+    def _verify(self):
         flag = "".join(random.choice(string.ascii_letters) for _ in xrange(0, 8))
         output_file = '{}.txt'.format(flag)
         '''
@@ -122,9 +121,7 @@ Oracle Fusion Middleware中的Oracle WebLogic Server组件的WLS Security子组�
         if result:
             output.success(result)
         else:
-            output.fail('Internet nothing returned')
+            output.fail('not vulnerability')
         return output
-
-
 
 register(TestPOC)

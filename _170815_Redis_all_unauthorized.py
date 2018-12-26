@@ -1,11 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
 import socket
 import urlparse
 from pocsuite.utils import register
 from pocsuite.poc import Output, POCBase
-
 
 class TestPOC(POCBase):
     vulID = '00002'
@@ -47,7 +45,8 @@ class TestPOC(POCBase):
                 result['VerifyInfo']['port'] = port
                 result['VerifyInfo']['result'] = data[:20]
         except Exception as e:
-            print e
+            #print e
+            pass
         s.close()
         return self.parse_attack(result)
 
@@ -59,8 +58,7 @@ class TestPOC(POCBase):
         if result:
             output.success(result)
         else:
-            output.fail("someting error")
+            output.fail("not vulnerability")
         return output
-
 
 register(TestPOC)
