@@ -43,7 +43,7 @@ class TestPOC(POCBase):
                 result['VerifyInfo'] = {}
                 result['VerifyInfo']['url'] = self.url
                 result['VerifyInfo']['port'] = port
-                result['VerifyInfo']['result'] = data[:20]
+                result['VerifyInfo']['result'] = data#[:20]
         except Exception as e:
             #print e
             pass

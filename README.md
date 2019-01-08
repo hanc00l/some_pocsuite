@@ -14,8 +14,9 @@
 | 2    | weblogic-vul-check_all_rce.py           | weblogic反序列化漏洞（CVE-2016-0638，CVE-2016-3510，CVE-2017-3248，CVE-2018-2628，CVE-2018-2893） |
 | 3    | weblogic-wls-2017_10271_all_rce.py      | weblogic WLS组件反序列化漏洞CVE-2017-10271                   |
 | 4    | zookeeper_all_unauthorized.py           | zookeeper未授权访问                                          |
-| 5    | _170815_Redis_all_unauthorized.py       | redis未授权访问（ [pocsuite_poc_collect](https://github.com/njcx/pocsuite_poc_collect)） |
+| 5    | redis_all_unauthorized.py               | redis未授权访问（ [pocsuite_poc_collect](https://github.com/njcx/pocsuite_poc_collect)） |
 | 6    | memcached_all_unauthorized.py           | memchached未授权访问                                         |
+| 7    | snmp_v2_unauthorized.py                 | snmp未授权访问（需要安装pysnmp模块）                         |
 
 ## 参考及依赖项目
 

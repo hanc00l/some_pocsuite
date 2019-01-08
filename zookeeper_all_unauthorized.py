@@ -17,7 +17,7 @@ class TestPOC(POCBase):
     appPowerLink = ''
     appName = 'zookeeper'
     appVersion = 'All'
-    vulType = 'Info-disclosure'
+    vulType = 'Unauthorized'
     desc = '''
     Apache Zookeeper安装部署之后默认情况下不需要身份认证，攻击者可通过该漏洞泄露服务器的敏感信息。
     '''
