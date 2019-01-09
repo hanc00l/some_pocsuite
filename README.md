@@ -12,11 +12,14 @@
 | ---- | --------------------------------------- | ------------------------------------------------------------ |
 | 1    | hikvision-2013-4976_web_login-bypass.py | 海康威视cve-2013-4976匿名登录验证绕过                        |
 | 2    | weblogic-vul-check_all_rce.py           | weblogic反序列化漏洞（CVE-2016-0638，CVE-2016-3510，CVE-2017-3248，CVE-2018-2628，CVE-2018-2893） |
-| 3    | weblogic-wls-2017_10271_all_rce.py      | weblogic WLS组件反序列化漏洞CVE-2017-10271                   |
+| 3    | weblogic-wls-2017-10271_all_rce.py      | weblogic WLS组件反序列化漏洞CVE-2017-10271                   |
 | 4    | zookeeper_all_unauthorized.py           | zookeeper未授权访问                                          |
 | 5    | redis_all_unauthorized.py               | redis未授权访问（ [pocsuite_poc_collect](https://github.com/njcx/pocsuite_poc_collect)） |
 | 6    | memcached_all_unauthorized.py           | memchached未授权访问                                         |
 | 7    | snmp_v2_unauthorized.py                 | snmp未授权访问（需要安装pysnmp模块）                         |
+| 8    | iis-ms15-034_7_rce.py                   | IIS（CVE-2015-1635，MS15-034）Check Script                   |
+| 9    | iis-shortname_6_disclosure.py           | IIS Tilde Vulnerability (IIS Shortname) Check                |
+| 10   | rdp-ms12-020_all_rce.py                 | MS12-020/CVE-2012-0002 Vulnerability Tester                  |
 
 ## 参考及依赖项目
 

