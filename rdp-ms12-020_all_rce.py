@@ -134,9 +134,10 @@ class TestPOC(POCBase):
 
         result = {}
         pr = urlparse.urlparse(self.url)
-        ports = [3389]
-        if pr.port and pr.port not in ports:
-            ports.insert(0, pr.port)
+        if pr.port:  # and pr.port not in ports:
+            ports = [pr.port]
+        else:
+            ports = [3389,13389,23389]
         for port in ports:
             try:
                 status, msg = exploit(pr.hostname, port)

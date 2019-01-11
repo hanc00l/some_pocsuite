@@ -26,9 +26,10 @@ class TestPOC(POCBase):
     def _verify(self):
         result = {}
         pr = urlparse.urlparse(self.url)
-        ports = [11211]
-        if pr.port and pr.port not in ports:
-            ports.insert(0, pr.port)
+        if pr.port:  # and pr.port not in ports:
+            ports = [pr.port]
+        else:
+            ports = [11211,21211]
         for port in ports:
             try:
                 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

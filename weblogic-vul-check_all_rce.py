@@ -119,9 +119,10 @@ class TestPOC(POCBase):
         '''
         result = {}
         pr = urlparse.urlparse(self.url)
-        ports = [7001]
-        if pr.port and pr.port not in ports:
-            ports.insert(0, pr.port)
+        if pr.port:  # and pr.port not in ports:
+            ports = [pr.port]
+        else:
+            ports = [7001,17001,27001]
         for port in ports:
             uri = "{0}://{1}:{2}".format(pr.scheme, pr.hostname, str(port))
             status,msg = check(pr.hostname,port)

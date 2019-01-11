@@ -50,9 +50,10 @@ class TestPOC(POCBase):
 
         result = {}
         pr = urlparse.urlparse(self.url)
-        ports = [161]
-        if pr.port and pr.port not in ports:
-            ports.insert(0, pr.port)
+        if pr.port:  # and pr.port not in ports:
+            ports = [pr.port]
+        else:
+            ports = [161]
         for port in ports:
             try:
                 status,msg = test_snmp(pr.hostname,port)

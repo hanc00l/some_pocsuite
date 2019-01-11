@@ -52,9 +52,10 @@ class TestPOC(POCBase):
 
         result = {}
         pr = urlparse.urlparse(self.url)
-        ports = [80]
-        if pr.port and pr.port not in ports:
-            ports.insert(0, pr.port)
+        if pr.port:  # and pr.port not in ports:
+            ports = [pr.port]
+        else:
+            ports = [80]
         for port in ports:
             try:
                 url = '{}://{}:{}'.format(pr.scheme, pr.hostname, port)
