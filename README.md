@@ -20,7 +20,8 @@
 | 8    | iis-ms15-034_7_rce.py                   | IIS（CVE-2015-1635，MS15-034）Check Script                   |
 | 9    | iis-shortname_6_disclosure.py           | IIS Tilde Vulnerability (IIS Shortname) Check                |
 | 10   | rdp-ms12-020_all_rce.py                 | MS12-020/CVE-2012-0002 Vulnerability Tester                  |
-| 11   | windows-ms14-066_all_rce.py             | winshock (MS14-066) Vulnerability Tester                  |
+| 11   | windows-ms14-066_all_rce.py             | winshock (MS14-066) Vulnerability Tester                     |
+| 12   | weblogic-async_all_rce.py               | weblogic async反序列化(CVE-2019-2725)Vulnerability Tester (POP: jdk7u21) |
 ## 参考及依赖项目
 
 - [Pocsuite](https://github.com/knownsec/Pocsuite)
