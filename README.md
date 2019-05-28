@@ -22,7 +22,7 @@
 | 10   | rdp-ms12-020_all_rce.py                 | MS12-020/CVE-2012-0002 Vulnerability Tester                  |
 | 11   | windows-ms14-066_all_rce.py             | winshock (MS14-066) Vulnerability Tester                     |
 | 12   | weblogic-async_all_rce.py               | weblogic async反序列化(CVE-2019-2725)Vulnerability Tester (POP: jdk7u21) |
-| 13   | rdp-2019-0708_all_rce.py                | windows RDP RCE Vulnerability（CVE-2019-0708）Check (by  zerosum0x0/CVE-2019-0708) |
+| 13   | rdp-2019-0708_all_rce.py                | windows RDP RCE Vulnerability（CVE-2019-0708）Check (by  robertdavidgraham/rdpscan) |
 ## 参考及依赖项目
 
 - [Pocsuite](https://github.com/knownsec/Pocsuite)

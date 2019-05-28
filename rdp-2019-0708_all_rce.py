@@ -17,7 +17,7 @@ class TestPOC(POCBase):
     vulDate = '2019-5-14'
     createDate = '2019-5-28'
     updateDate = '2019-5-28'
-    references = ['https://github.com/zerosum0x0/CVE-2019-0708', ]
+    references = ['https://github.com/zerosum0x0/CVE-2019-0708','https://github.com/robertdavidgraham/rdpscan' ]
     name = 'Remote Desktop Services Remote Code Execution Vulnerability（CVE-2019-0708）Check'
     appPowerLink = 'https://portal.msrc.microsoft.com/en-US/security-guidance/advisory/CVE-2019-0708'
     appName = 'Windows'
@@ -31,23 +31,27 @@ class TestPOC(POCBase):
     An attacker could then install programs; view, change, or delete data; or create new accounts with full user rights.
 
     PS:
-    目前检测脚本是利用 https://github.com/zerosum0x0/CVE-2019-0708 提供的rdesktop来检测是否存在漏洞，在使用本POC时有以下限制：
-    1、确保rdesktop在当前路径中 (https://github.com/zerosum0x0/CVE-2019-0708/blob/master/rdesktop-fork-bd6aa6acddf0ba640a49834807872f4cc0d0a773/rdesktop)
-    2、只能在X11 GUI Linux environment命令行下使用
+    目前检测脚本是利用 https://github.com/robertdavidgraham/rdpscan 提供的rdpscan来检测是否存在漏洞
     '''
 
     def _verify(self):
-        def check_os_and_rdesktop_exist():
-            if not sys.platform.startswith('linux'):
-                raise(Exception('POC only can test in linux'))
+        def check_os_and_rdpscan_exist():
+            binfile = ''
+            if sys.platform.startswith('linux'):
+                binfile = 'rdpscan_linux'
+            elif sys.platform.startswith('win'):
+                binfile = 'rdpscan_win.exe'
+            elif sys.platform.startswith('darwin'):
+                binfile = 'rdpscan_mac'
 
-            RDESKTOP_BIN = 'rdesktop'
-            rdesktop_pathname = os.path.join(os.path.abspath('.'),RDESKTOP_BIN)
-            if not os.path.exists(rdesktop_pathname):
-                raise(Exception('rdesktop binfile not found in current path'))
+            rdpscan_pathname = os.path.join(os.path.abspath('.'),binfile)
+            if not os.path.exists(rdpscan_pathname):
+                raise(Exception('{} binfile not found in current path'.format(binfile)))
 
-        def run_rdesktop(target):
-            args = ['./rdesktop',target]
+            return rdpscan_pathname
+
+        def run_rdpscan(binfile,ip,port):
+            args = [binfile,'--port',str(port),ip]
             process = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=False)
 
             try:
@@ -60,12 +64,12 @@ class TestPOC(POCBase):
 
             if returncode != 0:
                 return False,None
-            elif stdout is not None and re.search('Target is VULNERABLE', stdout.decode('UTF-8')):
-                return True,stdout.decode('utf-8')
+            elif stdout is not None and 'VULNERABLE' in stdout:
+                return True,stdout
 
             return False,None
 
-        check_os_and_rdesktop_exist()
+        binfile = check_os_and_rdpscan_exist()
         result = {}
         pr = urlparse.urlparse(self.url)
         if pr.port:  # and pr.port not in ports:
@@ -75,7 +79,7 @@ class TestPOC(POCBase):
         for port in ports:
             try:
                 target = '{}:{}'.format(pr.hostname, port)
-                status,msg = run_rdesktop(target)
+                status,msg = run_rdpscan(binfile,pr.hostname,port)
                 if status:
                     result['VerifyInfo'] = {}
                     result['VerifyInfo']['URL'] = target
