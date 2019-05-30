@@ -21,14 +21,13 @@
 | 9    | iis-shortname_6_disclosure.py           | IIS Tilde Vulnerability (IIS Shortname) Check                |
 | 10   | rdp-ms12-020_all_rce.py                 | MS12-020/CVE-2012-0002 Vulnerability Tester                  |
 | 11   | windows-ms14-066_all_rce.py             | winshock (MS14-066) Vulnerability Tester                     |
-| 12   | weblogic-async_all_rce.py               | weblogic async反序列化(CVE-2019-2725)Vulnerability Tester (POP: jdk7u21) |
+| 12   | weblogic-async-2019-2725_all_rce.py     | weblogic async反序列化(CVE-2019-2725)Vulnerability Tester (POP: jdk7u21) |
 | 13   | rdp-2019-0708_all_rce.py                | windows RDP RCE Vulnerability（CVE-2019-0708）Check (by  robertdavidgraham/rdpscan) |
+| 14   | weblogic-ssrf_all_ssrf.py               | WebLogic SSRF And XSS(CVE-2014-4241, CVE-2014-4210, CVE-2014-4242) check POC |
+
 ## 参考及依赖项目
 
 - [Pocsuite](https://github.com/knownsec/Pocsuite)
 
 - [pocsuite_poc_collect](https://github.com/njcx/pocsuite_poc_collect)
 
-- [w9scan](https://github.com/boy-hack/w9scan)
-
-- [Fuxi-scanner](https://github.com/jeffzh3ng/Fuxi-Scanner)

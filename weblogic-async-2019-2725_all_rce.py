@@ -18,7 +18,7 @@ class TestPOC(POCBase):
     references = [
         'http://www.cnvd.org.cn/webinfo/show/4989',
     ]
-    name = 'WebLogic wls9-async反序列化远程命令执行漏洞'
+    name = 'WebLogic cve-2019-2725 反序列化远程命令执行漏洞'
     appPowerLink = 'https://www.oracle.com/middleware/weblogic/index.html'
     appName = 'WebLogic'
     appVersion = '10.3.x,12.x'
