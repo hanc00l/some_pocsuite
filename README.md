@@ -11,7 +11,7 @@
 | 序号 | poc                                     | 说明                                                         |
 | ---- | --------------------------------------- | ------------------------------------------------------------ |
 | 1    | hikvision-2013-4976_web_login-bypass.py | 海康威视cve-2013-4976匿名登录验证绕过                        |
-| 2    | weblogic-vul-check_all_rce.py           | weblogic反序列化漏洞（CVE-2016-0638，CVE-2016-3510，CVE-2017-3248，CVE-2018-2628，CVE-2018-2893） |
+| 2    | weblogic-vul-check_all_rce.py           | weblogic反序列化漏洞（CVE-2016-0638，CVE-2016-3510，CVE-2017-3248，CVE-2018-2628，CVE-2018-2893, CVE-2019-2890） |
 | 3    | weblogic-wls-2017-10271_all_rce.py      | weblogic WLS组件反序列化漏洞CVE-2017-10271                   |
 | 4    | zookeeper_all_unauthorized.py           | zookeeper未授权访问                                          |
 | 5    | redis_all_unauthorized.py               | redis未授权访问（ [pocsuite_poc_collect](https://github.com/njcx/pocsuite_poc_collect)） |
