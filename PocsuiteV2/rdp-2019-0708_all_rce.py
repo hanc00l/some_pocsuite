@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 # coding: utf-8
+import urlparse
+import re
 import os
 import sys
 import subprocess
-from urllib.parse import urlparse
-from pocsuite3.api import register_poc
-from pocsuite3.api import Output, POCBase
-from pocsuite3.api import POC_CATEGORY, VUL_TYPE
+from pocsuite.api.request import req
+from pocsuite.api.poc import register
+from pocsuite.api.poc import Output, POCBase
 
 
 class TestPOC(POCBase):
@@ -21,8 +22,7 @@ class TestPOC(POCBase):
     appPowerLink = 'https://portal.msrc.microsoft.com/en-US/security-guidance/advisory/CVE-2019-0708'
     appName = 'Windows'
     appVersion = '2003,XP,7,Server2008,Server2008 R2'
-    vulType = VUL_TYPE.CODE_EXECUTION
-    category = POC_CATEGORY.EXPLOITS.REMOTE
+    vulType = 'Remote Code Execution'
     desc = '''
     A remote code execution vulnerability exists in Remote Desktop Services – formerly known as Terminal Services – 
     when an unauthenticated attacker connects to the target system using RDP and sends specially crafted requests. 
@@ -60,9 +60,8 @@ class TestPOC(POCBase):
                 process.kill()
                 stdout, stderr = process.communicate()
 
-            stdout = stdout.decode('utf-8').strip()
             returncode = process.returncode
-            
+
             if returncode != 0:
                 return False,None
             elif stdout is not None and 'VULNERABLE' in stdout:
@@ -72,7 +71,7 @@ class TestPOC(POCBase):
 
         binfile = check_os_and_rdpscan_exist()
         result = {}
-        pr = urlparse(self.url)
+        pr = urlparse.urlparse(self.url)
         if pr.port:  # and pr.port not in ports:
             ports = [pr.port]
         else:
@@ -104,4 +103,4 @@ class TestPOC(POCBase):
         return output
 
 
-register_poc(TestPOC)
+register(TestPOC)

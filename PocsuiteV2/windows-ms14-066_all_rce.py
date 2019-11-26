@@ -1,11 +1,10 @@
 #!/usr/bin/env python
 # coding: utf-8
+import urlparse
 import subprocess
 import re
-from urllib.parse import urlparse
-from pocsuite3.api import register_poc
-from pocsuite3.api import Output, POCBase
-from pocsuite3.api import POC_CATEGORY, VUL_TYPE
+from pocsuite.api.poc import register
+from pocsuite.api.poc import Output, POCBase
 
 
 class TestPOC(POCBase):
@@ -20,8 +19,7 @@ class TestPOC(POCBase):
     appPowerLink = 'https://docs.microsoft.com/en-us/security-updates/securitybulletins/2014/ms14-066'
     appName = 'windows'
     appVersion = 'All'
-    vulType = VUL_TYPE.CODE_EXECUTION
-    category = POC_CATEGORY.EXPLOITS.REMOTE
+    vulType = 'Remote Code Execution'
     desc = '''
     This script tries to determine whether the target system has the
     winshock (MS14-066) patches applied or not.
@@ -47,16 +45,17 @@ class TestPOC(POCBase):
 
         def check_openssl_ciphers():
             cmd_args = ['openssl', 'ciphers']
-            ciphers_openssl = shell_execute(cmd_args).decode('utf-8')
+            ciphers_openssl = shell_execute(cmd_args)
             for cipher_test in MS14_066_CIPHERS.split(' '):
                 if cipher_test not in ciphers_openssl:
                     return (False, 'OpenSSL does not support {} cipher'.format(cipher_test))
+
             return (True, 'ok')
 
         def check_cipher(cipher_test, url, global_options, windows_server_2012_or_later_test=False):
             cmd_args = ['openssl', 's_client',
                         '-cipher', cipher_test, '-connect', url]
-            results = shell_execute(cmd_args).decode('utf-8')
+            results = shell_execute(cmd_args)
             if 'connect:errno=' in results:
                 return (False, 'Connection error')
             elif 'SSL23_GET_SERVER_HELLO:unknown protocol' in results:
@@ -101,9 +100,9 @@ class TestPOC(POCBase):
 
         def check_iis_443(host, global_options):
             cmd_args = ['curl', '-k', '-I', 'https://{}'.format(host)]
-            results = shell_execute(cmd_args).decode('utf-8')
+            results = shell_execute(cmd_args)
             if 'Microsoft-IIS' in results:
-                m = re.findall(r'Server: Microsoft-IIS/(.+)', results)
+                m = re.findall('Server: Microsoft-IIS/(.+)', results)
                 if m:
                     iis_version = m[0].strip()
                     global_options['iis_detected'] = 'yes'
@@ -150,18 +149,18 @@ class TestPOC(POCBase):
             else:
                 PATCHED = 'NO'
             result.append('patched:{}'.format(PATCHED))
-            # 根据对SSL的支持和PATCHED结果，判断是否存在漏洞
+            #根据对SSL的支持和PATCHED结果，判断是否存在漏洞
             if support and PATCHED == 'NO':
                 return (True, ' '.join(result))
             else:
                 return (False, ' '.join(result))
 
         result = {}
-        pr = urlparse(self.url)
+        pr = urlparse.urlparse(self.url)
         if pr.port:  # and pr.port not in ports:
             ports = [pr.port]
         else:
-            ports = [3389, 13389, 23389]
+            ports = [3389, 13389,23389]
         for port in ports:
             try:
                 status, msg = check(pr.hostname, port)
@@ -173,7 +172,6 @@ class TestPOC(POCBase):
                     result['extra']['evidence'] = msg
                     break
             except:
-                raise
                 pass
 
         return self.parse_output(result)
@@ -190,4 +188,4 @@ class TestPOC(POCBase):
         return output
 
 
-register_poc(TestPOC)
+register(TestPOC)
