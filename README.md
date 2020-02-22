@@ -26,8 +26,9 @@
 | 12   | weblogic-async-2019-2725_all_rce.py     | weblogic async反序列化(CVE-2019-2725)Vulnerability Tester (POP: jdk7u21) |
 | 13   | rdp-2019-0708_all_rce.py                | windows RDP RCE Vulnerability（CVE-2019-0708）Check (by  robertdavidgraham/rdpscan) |
 | 14   | weblogic-ssrf_all_ssrf.py               | WebLogic SSRF And XSS(CVE-2014-4241, CVE-2014-4210, CVE-2014-4242) check POC |
-| 15   | webmin_1.92_rce.py               | Webmin 1.920 Unauthenticated Remote Code Execution（CVE-2019-15107）check POC by jerome |
-| 16   | solr_8.3.1_rce.py               | Apache Solr Velocity 注入远程命令执行漏洞 (CVE-2019-17558) check POC by jerome |
+| 15   | webmin_1.92_rce.py                      | Webmin 1.920 Unauthenticated Remote Code Execution（CVE-2019-15107）check POC by jerome |
+| 16   | solr_8.3.1_rce.py                       | Apache Solr Velocity 注入远程命令执行漏洞 (CVE-2019-17558) check POC by jerome |
+| 17   | supervisord-2017-11610_3_rce.py         | CVE-2017-11610 Supervisord 远程命令执行漏洞 check POC by kcat |
 
 
 
