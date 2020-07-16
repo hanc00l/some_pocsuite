@@ -1,8 +1,12 @@
 # some_pocsuite
 
-本项目是用于企业内部进行漏洞排查与验证的的pocsuite3验证POC代码（pocsuite3是知道创宇安全团队的开源漏洞测试框架）。
+
+
+用于企业内部进行漏洞排查与验证的的pocsuite3验证POC代码（pocsuite3是知道创宇安全团队的开源漏洞测试框架）。
 
 由于原Pocsuite已停止更新，因此将原来的POC代码全部重新改写并迁移到pocsuite3，原POC备份在PocsuiteV2中。
+
+
 
 ## 插件代码编写
 
@@ -31,15 +35,13 @@
 | 17   | supervisord-2017-11610_3_rce.py         | CVE-2017-11610 Supervisord 远程命令执行漏洞 check POC by kcat |
 | 18   | tomcat-ajp-ghostcat_all_lfi.py          | CNVD-2020-10487/CVE-2020-1938  TomcatAJP任意文件读取/包含漏洞 check POC by rootk1t |
 | 19   | f5-CVE-2020-5902_all_rce.py             | CVE-2020-5902 BIG-IP TMUI RCE漏洞 check POC                  |
-
-
-
+| 20  | weblogic-iiop-2020-2551_all_rce.py             | CVE-2020-2551 Weblogic IIOP反序列化漏洞 check POC by rootk1t |
 
 陆续扩充中...
 
-## 参考及依赖项目
+
+
+## 参考
 
 - [Pocsuite3](https://github.com/knownsec/pocsuite3/)
-
-- [pocsuite_poc_collect](https://github.com/njcx/pocsuite_poc_collect)
 
