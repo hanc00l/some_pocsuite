@@ -30,6 +30,8 @@
 | 16   | solr_8.3.1_rce.py                       | Apache Solr Velocity 注入远程命令执行漏洞 (CVE-2019-17558) check POC by jerome |
 | 17   | supervisord-2017-11610_3_rce.py         | CVE-2017-11610 Supervisord 远程命令执行漏洞 check POC by kcat |
 | 18   | tomcat-ajp-ghostcat_all_lfi.py          | CNVD-2020-10487/CVE-2020-1938  TomcatAJP任意文件读取/包含漏洞 check POC by rootk1t |
+| 19   | f5-CVE-2020-5902_all_rce.py             | CVE-2020-5902 BIG-IP TMUI RCE漏洞 check POC                  |
+
 
 
 
