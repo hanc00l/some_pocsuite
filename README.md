@@ -36,6 +36,7 @@
 | 18   | tomcat-ajp-ghostcat_all_lfi.py          | CNVD-2020-10487/CVE-2020-1938  TomcatAJP任意文件读取/包含漏洞 check POC by rootk1t |
 | 19   | f5-CVE-2020-5902_all_rce.py             | CVE-2020-5902 BIG-IP TMUI RCE漏洞 check POC                  |
 | 20  | weblogic-iiop-2020-2551_all_rce.py             | CVE-2020-2551 Weblogic IIOP反序列化漏洞 check POC by rootk1t |
+| 21  | weblogic-console-2020-14882_all_rce.py      | CVE-2020-14882 Weblogic Unauthorized bypass RCE check POC|
 
 陆续扩充中...
 
