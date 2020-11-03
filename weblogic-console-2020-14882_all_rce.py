@@ -34,15 +34,13 @@ class TestPOC(POCBase):
     def _verify(self):
         headers = {
             'User-Agent': 'Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0)'}
-        timeout = 30
 
         def check_console(target):
             if not target.startswith('http'):
                 target = 'http://{}'.format(target)
             url = '{}/console/'.format(target)
             try:
-                r = req.get(url, headers=headers,
-                            timeout=timeout,  verify=False)
+                r = req.get(url, headers=headers, verify=False, timeout=5)
                 if r.status_code == req.codes.ok:
                     if 'Deploying application for /console/...' in r.text:
                         time.sleep(2)
@@ -65,10 +63,10 @@ class TestPOC(POCBase):
             url = '{}{}'.format(target, console_url)
             try:
                 # get session cookes
-                r = s.get(url, timeout=timeout, allow_redirects=False)
+                r = s.get(url, allow_redirects=False)
                 # 302 to portal
                 if r.status_code == 302:
-                    r = s.get(url, timeout=timeout)
+                    r = s.get(url)
                     if r.status_code == 200 and 'id="HomePage1"' in r.text:
                         m = re.findall(
                             '<p id="footerVersion">(.*?)</p>', r.text)
