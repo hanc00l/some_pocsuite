@@ -38,6 +38,7 @@
 | 20  | weblogic-iiop-2020-2551_all_rce.py             | CVE-2020-2551 Weblogic IIOP反序列化漏洞 check POC by rootk1t |
 | 21  | weblogic-console-2020-14882_all_rce.py      | CVE-2020-14882 Weblogic Unauthorized bypass RCE check POC|
 | 22  | flink-CVE-2020-17519_1.11.2_fileread.py      | CVE-2020-17519 Apache Flink目录穿越漏洞 check POC|
+| 23  | flink-CVE-2020-17518_1.11.2_rce.py      | CVE-2020-17518 Apache Flink任意文件写漏洞导致RCE|
 
 陆续扩充中...
 
