@@ -41,6 +41,8 @@
 | 23  | flink-CVE-2020-17518_1.11.2_rce.py      | CVE-2020-17518 Apache Flink任意文件写漏洞导致RCE|
 | 24  | springboot-actuator_all_unauthorized.py      | SpringBoot Actuator配置信息未授权访问 check Poc|
 | 25  | vmware-vcenter-FileUpload_CVE-2021-22005_rce.py      | VMware vCenter Server未授权任意文件上传漏洞CVE-2021-22005 check Poc by knownsec|
+| 26  | gitlab-upload-2021-22205_13.10.2_rce.py      | CVE-2021-22205 Gitlab Upload RCE check Poc by Wing|
+
 陆续扩充中...
 
 
